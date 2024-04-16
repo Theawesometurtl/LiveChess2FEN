@@ -22,7 +22,7 @@ MODEL_PATH_KERAS = "data/models/Xception_last.h5"
 IMG_SIZE_KERAS = 299
 PRE_INPUT_KERAS = prein_xception
 
-ACTIVATE_ONNX = False
+ACTIVATE_ONNX = True
 MODEL_PATH_ONNX = "data/models/MobileNetV2_0p5_all.onnx"
 IMG_SIZE_ONNX = 224
 PRE_INPUT_ONNX = prein_mobilenet
