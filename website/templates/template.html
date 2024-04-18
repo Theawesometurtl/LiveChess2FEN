@@ -1,13 +1,15 @@
 <title>Chess Recognition Website</title>
+<link rel="icon" type="image/x-icon" href="../static/favicon.ico">
 
 <h1>Chess Recognition Website</h1>
 
 <br> <br>
 
-<form>
-    <input type="text" id="prevFEN" value="">
-    <input type="submit" value="Submit">
-
+<form method="POST">
+    <label for="prevFEN">Enter Previous FEN</label>
+    <input type="text" id="prevFEN" name="prevFEN" value="" placeholder="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR">
+    <input type="submit" value="Submit" id="submit" name="submit"><br>
+    <input type="button" id="webcam_btn" name="webcam_btn" value="Take Photo Of Game" >
 </form>
 
-<p>Here is your output FEN</p>
+<p>Here is your output FEN: {{text}}</p>
