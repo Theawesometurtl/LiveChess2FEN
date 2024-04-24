@@ -5,17 +5,14 @@ import os, sys
 import numpy as np
 from threading import Thread
 
+
 views = Blueprint('views', __name__)
 
-@views.route('/', methods=['GET', 'POST'])
+@views.route('/')
 def home():
-    if request.method == 'POST':
-        prevFEN = request.form.get('prevFEN')
+    
 
-        if len(prevFEN) < 16:
-            flash('too short', category="error")
-        else:
-            flash('worked!', category="success")
+
     return render_template("template.html", text = "FEN test")
 
 
@@ -26,11 +23,7 @@ neg=0
 switch=1
 rec=0
 
-#make shots directory to save pics
-try:
-    os.mkdir('./shots')
-except OSError as error:
-    pass
+
 
 
 
@@ -41,7 +34,6 @@ def record(out):
     while(rec):
         time.sleep(0.05)
         out.write(rec_frame)
-
 
 
 def gen_frames():  # generate frame by frame from camera
@@ -56,8 +48,9 @@ def gen_frames():  # generate frame by frame from camera
             if(capture):
                 capture=0
                 now = datetime.datetime.now()
-                p = os.path.sep.join(['shots', "shot_{}.png".format(str(now).replace(":",''))])
+                p = os.path.sep.join(['website\shots', "shot_{}.png".format(str(now).replace(":",''))])
                 cv2.imwrite(p, frame)
+
             
             if(rec):
                 rec_frame=frame
@@ -88,10 +81,18 @@ def tasks():
     print("capture")
     global switch,camera
     if request.method == 'POST':
-        if request.form.get('click') == 'Capture':
-            global capture
-            capture=1
-        elif  request.form.get('grey') == 'Grey':
+        prevFEN = request.form.get('prevFEN')
+
+        if len(prevFEN) < 16:
+            flash('too short', category="error")
+        else:
+            flash('worked!', category="success")
+
+        # main("-o", "BL", "", prevFEN, )
+        # if request.form.get('click') == 'Capture':
+        global capture
+        capture=1
+        if  request.form.get('grey') == 'Grey':
             global grey
             grey=not grey
         elif  request.form.get('neg') == 'Negative':

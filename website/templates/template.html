@@ -30,11 +30,10 @@
     </div>
     {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-    <form method="POST">
-        <label for="prevFEN">Enter Previous FEN</label>
-        <input type="text" id="prevFEN" name="prevFEN" value="" placeholder="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR">
-        <input type="submit" value="Submit" id="submit" name="submit"><br>
-        <input type="button" id="webcam_btn" name="webcam_btn" value="Take Photo Of Game" >
+    <form method="POST" action="{{ url_for('views.tasks') }}">
+      <label for="prevFEN">Enter Previous FEN</label>
+      <input type="text" id="prevFEN" name="prevFEN" value="" placeholder="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR">
+      <input type="submit" value="Submit" id="submit" name="submit"><br>
     </form>
 
     <p>Here is your output FEN: {{text}}</p>
