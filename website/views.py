@@ -5,15 +5,25 @@ import os, sys
 import numpy as np
 from threading import Thread
 from .lc2fen import main
+from lc2fen.predict_board import (
+    predict_board_keras,
+    predict_board_onnx,
+    predict_board_trt,
+)
+from keras.applications.mobilenet_v2 import preprocess_input as prein_mobilenet
+
+
+
 
 views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    
+    global text
+    text = ""
 
 
-    return render_template("template.html", text = "FEN test")
+    return render_template("template.html", text = text)
 
 
 global capture,rec_frame, grey, switch, neg, rec, out 
@@ -37,7 +47,7 @@ def record(out):
 
 
 def gen_frames():  # generate frame by frame from camera
-    global out, capture,rec_frame
+    global out, capture,rec_frame,text
     while True:
         success, frame = camera.read() 
         if success:
@@ -47,12 +57,23 @@ def gen_frames():  # generate frame by frame from camera
                 frame=cv2.bitwise_not(frame)    
             if(capture):
                 capture=0
+                MODEL_PATH_ONNX = "data/models/MobileNetV2_0p5_all.onnx"
+                IMG_SIZE_ONNX = 224
+                PRE_INPUT_ONNX = prein_mobilenet
                 now = datetime.datetime.now()
                 p = os.path.sep.join(['website\shots', "shot_{}.png".format(str(now).replace(":",''))])
                 cv2.imwrite(p, frame)
-                script_arguments = ["-h","./website\shots/shot_{}.png".format(str(now).replace(":",'')), "BL", prevFEN, ]
-                sys.argv = script_arguments
-                main()
+                fen, _ = predict_board_onnx(
+                    MODEL_PATH_ONNX,
+                    IMG_SIZE_ONNX,
+                    PRE_INPUT_ONNX,
+                    "./website\shots/shot_{}.png".format(str(now).replace(":",'')),
+                    "BL",
+                    previous_fen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+                )
+                print(fen)
+                text = fen
+
 
             
             if(rec):
