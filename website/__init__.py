@@ -7,7 +7,7 @@ def create_app():
 
     #make shots directory to save pics
     try:
-        os.mkdir('./shots')
+        os.mkdir('./website/shots')
     except OSError as error:
         pass
 

@@ -4,7 +4,7 @@ import datetime, time
 import os, sys
 import numpy as np
 from threading import Thread
-
+from .lc2fen import main
 
 views = Blueprint('views', __name__)
 
@@ -50,6 +50,9 @@ def gen_frames():  # generate frame by frame from camera
                 now = datetime.datetime.now()
                 p = os.path.sep.join(['website\shots', "shot_{}.png".format(str(now).replace(":",''))])
                 cv2.imwrite(p, frame)
+                script_arguments = ["-h","./website\shots/shot_{}.png".format(str(now).replace(":",'')), "BL", prevFEN, ]
+                sys.argv = script_arguments
+                main()
 
             
             if(rec):
@@ -79,7 +82,7 @@ def video_feed():
 @views.route('/requests',methods=['POST','GET'])
 def tasks():
     print("capture")
-    global switch,camera
+    global switch,camera, prevFEN
     if request.method == 'POST':
         prevFEN = request.form.get('prevFEN')
 
@@ -87,11 +90,10 @@ def tasks():
             flash('too short', category="error")
         else:
             flash('worked!', category="success")
-
-        # main("-o", "BL", "", prevFEN, )
-        # if request.form.get('click') == 'Capture':
         global capture
         capture=1
+        
+        # if request.form.get('click') == 'Capture':
         if  request.form.get('grey') == 'Grey':
             global grey
             grey=not grey
