@@ -20,18 +20,19 @@ views = Blueprint('views', __name__)
 @views.route('/')
 def home():
     global text
-    text = ""
+    
 
 
     return render_template("template.html", text = text)
 
 
-global capture,rec_frame, grey, switch, neg, rec, out 
+global capture,rec_frame, grey, switch, neg, rec, out, text
 capture=0
 grey=0
 neg=0
 switch=1
 rec=0
+text=""
 
 
 
